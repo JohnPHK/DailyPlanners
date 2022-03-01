@@ -5,18 +5,18 @@ var ctx = canvas.getContext('2d')
 var dimension, height, radius,  width;
 
 var hour12 = [
-    {start:0, end:30, display:'04', clicked:false},
-    {start:30, end:60, display:'05', clicked: false},
-    {start:60, end:90, display:'06', clicked: false},
-    {start:90, end:120, display:'07', clicked: false},
-    {start:120, end:150, display:'08', clicked: false},
-    {start:150, end:180, display:'09', clicked: false},
-    {start:180, end:210, display:'10', clicked: false},
-    {start:210, end:240, display:'11', clicked: false},
-    {start:240, end:270, display:'12', clicked: false},
-    {start:270, end:300, display:'01', clicked: false},
-    {start:300, end:330, display:'02', clicked: false},
-    {start:330, end:360, display:'03', clicked: false}
+    {start:0, end:30, display:'04', clicked:false, index: ''},
+    {start:30, end:60, display:'05', clicked: false, index: ''},
+    {start:60, end:90, display:'06', clicked: false, index: ''},
+    {start:90, end:120, display:'07', clicked: false, index: ''},
+    {start:120, end:150, display:'08', clicked: false, index: ''},
+    {start:150, end:180, display:'09', clicked: false, index: ''},
+    {start:180, end:210, display:'10', clicked: false, index: ''},
+    {start:210, end:240, display:'11', clicked: false, index: ''},
+    {start:240, end:270, display:'12', clicked: false, index: ''},
+    {start:270, end:300, display:'01', clicked: false, index: ''},
+    {start:300, end:330, display:'02', clicked: false, index: ''},
+    {start:330, end:360, display:'03', clicked: false, index: ''}
 ]
 
 data = [{
@@ -167,18 +167,6 @@ function drawCircleBackBone() {
     ctx.restore()
 }
 
-function drawCircleBackBonev2() {
-    ctx.save()
-    ctx.beginPath()
-    ctx.lineWidth = 3
-    ctx.strokeStyle='#000000'
-    console.log("radius test", radius);
-    ctx.arc(canvas.width/2, canvas.height/2, radius, 0, (Math.PI / 180) * 360, false)
-    ctx.stroke()
-    ctx.closePath()
-    ctx.restore()
-}
-
 function drawArc(first, last, colour){
     ctx.save()
     ctx.beginPath()
@@ -235,6 +223,7 @@ function addHourTexts() {
         xx = Math.cos(degreesToRadians(data.end)) * radius*1.2 + canvas.width / 2
         yy = Math.sin(degreesToRadians(data.end)) * radius*1.2 + canvas.height / 2
         var minus = ctx.measureText(data.display).width / 2;
+        ctx.fillStyle = ' #a9a9a9'
         ctx.fillText(data.display, xx-minus, yy)  //텍스트의 길이 빼 주기
         ctx.closePath()
         ctx.restore()
@@ -259,16 +248,18 @@ canvas.addEventListener('mousemove', function (event) {
     var x1 = event.clientX - canvas.parentElement.offsetLeft
     var y1 = event.clientY - canvas.parentElement.offsetTop
     var inn = isInsideArc(x1, y1)
-    //console.log(inn);
+    console.log("inn:", inn);
     if (isDown) {
         if (inn.result == true) {
             inn.hour.clicked = true;
+            inn.hour.index = 'A';
         }
         //console.log(hour12);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawCircle();
         addHourLines();
         addHourTexts()
+        textMaker();
 
     }
 })
@@ -292,7 +283,19 @@ canvas.addEventListener('mouseup', function (event) {
         doubleClickedCnt = 0
 
     },250)
-}unction textMaker(){
+});
+
+
+window.addEventListener('resize', function(event) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    updateDimensions();
+    drawCircle();
+    addHourLines();
+    addHourTexts();
+    textMaker();
+})
+
+function textMaker(){
     var copyArr = Object.assign([], hour12)  //배열 복사
     var summery = []
     var eq = ''
@@ -312,7 +315,7 @@ canvas.addEventListener('mouseup', function (event) {
                 summery.push({start : start, end : data.end, index : eq, filledColor: data.filledColor})
             }                
         } else if(idx == copyArr.length-1){ //마지막이면
-            summery.push({start : start, end : data.start, index : eq, filledColor: data.filledColor})
+            summery.push({start : start, end : data.end, index : eq, filledColor: data.filledColor})
         }
     })
 
@@ -332,13 +335,12 @@ canvas.addEventListener('mouseup', function (event) {
                 half = (360-data.start + data.end) / 2
             }
             var degg = data.start + half;
-            var xx = Math.cos(degreesToRadians(degg)) * radius * 0.7 + width / 2;
-            var yy = Math.sin(degreesToRadians(degg)) * radius * 0.7 + height / 2;
-            event_ctx.save()
-            event_ctx.beginPath()
-            event_ctx.fillStyle = 'white'
-            event_ctx.fillText(data.index, xx, yy)
-            event_ctx.restore()
+            var xx = Math.cos(degreesToRadians(degg)) * radius * 0.7 + canvas.width / 2;
+            console.log(xx);
+            var yy = Math.sin(degreesToRadians(degg)) * radius * 0.7 + canvas.height / 2;
+            ctx.fillStyle = 'red'
+            ctx.fillText(data.index, xx, yy)
+            ctx.restore()
         }
     })           
 }
