@@ -117,14 +117,12 @@ data = [{
     }]
 
 
+//updates dimensions of the canvas
 function updateDimensions() {
     var canvas = document.getElementById("canvas");
     var canvasContainer= document.getElementById("canvas-container");
     var ctx = canvas.getContext('2d')
     dimension = Math.min(canvasContainer.clientWidth, canvasContainer.clientHeight)
-    console.log("canvasContainer.clientWidth:", canvasContainer.clientWidth)
-    console.log("canvasContainer.clientHeight:", canvasContainer.clientHeight)
-    console.log(dimension);
     
     canvas.width = dimension;
     canvas.height = dimension;
@@ -152,6 +150,7 @@ function isInsideArc(x1, y1){
         return hour.start <= rad && rad <= hour.end 
     })
     return {result:result, degree : rad, hour: filtered[0]}
+  // result indicate whether the mouse is inside the circle (clock)
 }
 
 
@@ -276,9 +275,19 @@ canvas.addEventListener('mouseup', function (event) {
     //더블클릭
     setTimeout(function(){
         if(doubleClickedCnt >1){
-            var x1 = event.clientX - canvas.parentElement.offsetLeft
-            var y1 = event.clientY - canvas.parentElement.offsetTop
-            var inn = isInsideArc(x1, y1)
+          console.log("test1");
+          var x1 = event.clientX - canvas.parentElement.offsetLeft
+          var y1 = event.clientY - canvas.parentElement.offsetTop
+          var inn = isInsideArc(x1, y1);
+          console.log("testing inn:", inn);
+
+          if (inn.result === true) {
+            console.log("test2");
+            inn.hour.clicked = false;
+            inn.hour.index = '';
+            update();
+          }
+          
         }
         doubleClickedCnt = 0
 
@@ -287,12 +296,8 @@ canvas.addEventListener('mouseup', function (event) {
 
 
 window.addEventListener('resize', function(event) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    updateDimensions();
-    drawCircle();
-    addHourLines();
-    addHourTexts();
-    textMaker();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  update();
 })
 
 function textMaker(){
@@ -346,3 +351,12 @@ function textMaker(){
 }
 
 textMaker();
+
+
+function update() {
+  updateDimensions();
+  drawCircle();
+  addHourLines();
+  addHourTexts();
+  textMaker();
+}

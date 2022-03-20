@@ -8,11 +8,23 @@
 </head>
 <body>
   <div id="title">Welcome to Daily Planner!!</div>
-  <div id="canvas-container">
-  <canvas id="canvas"></canvas>
+  <div id="content-container">
+    <div id="instructions-container">
+      <div id="instruction-title-container">
+        <span id="instruction-title">Instructions:</span>
+      </div>
+      <div id="instruction-items-container">
+        <ul id="instruction-items">
+          <li>To input a schedule, click and drag, from the starting hour to the end hour wished to end</li>
+          <li>To remove a schedule, double click the hour marked to be schedule for something</li>
+        </ul>
+      </div>
+    </div>
+    <div id="canvas-container">
+      <canvas id="canvas"></canvas>
+    </div>
+    <div id="settings-container"></div>
   </div>
-  <div id="instruction"></div>
-  <div id="setting"></div>
   <script src="./index.js"></script>
 </body>
 </html>
