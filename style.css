@@ -71,4 +71,17 @@ li {
 
 }
 
+.custom-select {
+    display: flex;
+    flex-direction: row;
+    margin : 10px;
+}
 
+#checker, .colorselector_1, #job {
+    margin-left : 5px;
+    margin-right : 5px;
+}
+
+#add-new-task {
+    padding: 10px 25px;
+}

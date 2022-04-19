@@ -360,3 +360,15 @@ function update() {
   addHourTexts();
   textMaker();
 }
+
+var newTaskButton = document.getElementById("add-new-task");
+newTaskButton.addEventListener("click", function(event) {
+  var newTaskSelector = document.getElementsByClassName("custom-select")[0].cloneNode(true);
+  var selectorsContainer = document.getElementById("selectors");
+  selectorsContainer.appendChild(newTaskSelector);
+
+});
+
+
+
+
